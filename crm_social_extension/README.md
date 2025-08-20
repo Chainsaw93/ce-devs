@@ -37,6 +37,7 @@ A comprehensive CRM extension for Odoo 18.0 that enhances customer relationship 
 - `mail` - Odoo mail module
 - `portal` - Odoo portal module
 - `marketing_automation` - Odoo marketing automation module
+- `board` - Odoo Custom Boards
 
 ##  Installation
 
@@ -67,6 +68,9 @@ A comprehensive CRM extension for Odoo 18.0 that enhances customer relationship 
    - Go to Apps → Update Apps List
    - Search for "CRM Social Media Extension"
    - Click Install
+  
+5. ** Permissions **
+   - Add the user who can manage settings and view social media data to the Social Media Manager group in Settings -> Groups -> Social Media Manager
 
 ### Method 2: Docker Installation
 
