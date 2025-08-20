@@ -1,0 +1,391 @@
+/* CRM Social Extension - Backend Styles */
+
+/* Social Media Tab Styling */
+.o_notebook .nav-link[name="social_media"] {
+    color: #1f77b4;
+    font-weight: 500;
+}
+
+.o_notebook .nav-link[name="social_media"]:before {
+    content: "\f1e0";
+    font-family: FontAwesome;
+    margin-right: 5px;
+}
+
+.o_notebook .nav-link[name="social_media"].active {
+    background-color: #f8f9fa;
+    border-color: #1f77b4;
+}
+
+/* Social URL Fields Styling */
+.o_field_widget[name="facebook_url"] input,
+.o_field_widget[name="linkedin_url"] input,
+.o_field_widget[name="twitter_url"] input {
+    padding-left: 35px;
+    background-repeat: no-repeat;
+    background-position: 10px center;
+    background-size: 16px 16px;
+}
+
+.o_field_widget[name="facebook_url"] input {
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%231877f2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>');
+}
+
+.o_field_widget[name="linkedin_url"] input {
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%230077b5"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>');
+}
+
+.o_field_widget[name="twitter_url"] input {
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%231da1f2"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>');
+}
+
+/* Profile Complete Indicator */
+.o_field_widget[name="is_profile_complete"] .fa-check-circle {
+    color: #28a745;
+    font-size: 1.2em;
+}
+
+.profile-complete-header {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+.profile-complete-header i {
+    margin-right: 8px;
+    font-size: 1.3em;
+}
+
+/* Social Score Stat Button */
+.oe_stat_button[name="action_update_social_score"] {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.oe_stat_button[name="action_update_social_score"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.oe_stat_button[name="action_update_social_score"] .o_stat_value {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.oe_stat_button[name="action_update_social_score"] .o_stat_text {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+/* Social Score Progress Bar */
+.social-score-progress {
+    width: 100%;
+    height: 8px;
+    background-color: #e9ecef;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 5px;
+}
+
+.social-score-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #dc3545 0%, #ffc107 50%, #28a745 100%);
+    transition: width 0.6s ease;
+}
+
+/* Social Engagement Level Badge */
+.o_field_widget[name="social_engagement_level"] select {
+    border-radius: 20px;
+    font-weight: 500;
+}
+
+.social-engagement-low { background-color: #dc3545; color: white; }
+.social-engagement-medium { background-color: #ffc107; color: #212529; }
+.social-engagement-high { background-color: #28a745; color: white; }
+.social-engagement-excellent { background-color: #6f42c1; color: white; }
+
+/* Social Media Links Preview */
+.social-links-preview {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 15px;
+}
+
+.social-links-preview h6 {
+    color: #495057;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.social-link-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.social-link-item:last-child {
+    border-bottom: none;
+}
+
+.social-link-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.social-link-url {
+    flex-grow: 1;
+    font-size: 0.9rem;
+    color: #6c757d;
+    text-decoration: none;
+}
+
+.social-link-url:hover {
+    color: #495057;
+    text-decoration: underline;
+}
+
+/* List View Enhancements */
+.o_list_view .o_field_widget[name="is_profile_complete"] {
+    text-align: center;
+}
+
+.o_list_view .o_field_widget[name="social_score"] {
+    font-weight: 600;
+    text-align: right;
+}
+
+.o_list_view .o_field_widget[name="social_score"]:before {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.o_list_view .o_field_widget[name="social_score"][data-score="0"]:before {
+    background-color: #dc3545;
+}
+
+.o_list_view .o_field_widget[name="social_score"][data-score="1-39"]:before {
+    background-color: #ffc107;
+}
+
+.o_list_view .o_field_widget[name="social_score"][data-score="40-79"]:before {
+    background-color: #17a2b8;
+}
+
+.o_list_view .o_field_widget[name="social_score"][data-score="80-100"]:before {
+    background-color: #28a745;
+}
+
+/* Kanban View Enhancements */
+.o_kanban_view .social-media-icons {
+    margin-top: 8px;
+}
+
+.o_kanban_view .social-media-icons i {
+    margin-right: 5px;
+    font-size: 1.1em;
+}
+
+.o_kanban_view .social-media-icons .fa-facebook { color: #1877f2; }
+.o_kanban_view .social-media-icons .fa-linkedin { color: #0077b5; }
+.o_kanban_view .social-media-icons .fa-twitter { color: #1da1f2; }
+
+.o_kanban_view .profile-complete-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: #28a745;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+}
+
+/* Search View Filters */
+.o_search_panel .o_search_panel_filter_group[data-filter-name="social"] {
+    border-left: 3px solid #1f77b4;
+    padding-left: 10px;
+}
+
+.o_search_panel .o_search_panel_filter_group[data-filter-name="social"] .o_search_panel_filter_group_header {
+    color: #1f77b4;
+    font-weight: 600;
+}
+
+/* Form View Specific */
+.o_form_view .o_notebook_headers .nav-link[name="social_media"] {
+    position: relative;
+}
+
+.o_form_view .o_notebook_headers .nav-link[name="social_media"].incomplete:after {
+    content: "!";
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #dc3545;
+    color: white;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    font-size: 0.7em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+/* Activity Integration */
+.o_activity_view .activity-social {
+    border-left: 4px solid #1f77b4;
+}
+
+.o_activity_view .activity-social .o_activity_title:before {
+    content: "\f1e0";
+    font-family: FontAwesome;
+    color: #1f77b4;
+    margin-right: 5px;
+}
+
+/* Widget Animations */
+.social-field-updated {
+    animation: socialFieldUpdate 0.6s ease-out;
+}
+
+@keyframes socialFieldUpdate {
+    0% {
+        background-color: #e3f2fd;
+        transform: scale(1.02);
+    }
+    100% {
+        background-color: transparent;
+        transform: scale(1);
+    }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .oe_stat_button[name="action_update_social_score"] .o_stat_value {
+        font-size: 1.5rem;
+    }
+    
+    .o_field_widget[name="facebook_url"] input,
+    .o_field_widget[name="linkedin_url"] input,
+    .o_field_widget[name="twitter_url"] input {
+        padding-left: 15px;
+        background-image: none;
+    }
+    
+    .social-links-preview {
+        padding: 10px;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .social-links-preview {
+        background: #343a40;
+        border-color: #495057;
+    }
+    
+    .social-link-url {
+        color: #adb5bd;
+    }
+    
+    .social-link-url:hover {
+        color: #f8f9fa;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .oe_stat_button[name="action_update_social_score"],
+    .social-links-preview {
+        background: white !important;
+        color: black !important;
+    }
+}
+
+/* Loading States */
+.social-field-loading {
+    position: relative;
+    pointer-events: none;
+}
+
+.social-field-loading:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    margin: -8px 0 0 -8px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #1f77b4;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Accessibility Improvements */
+.social-field-group {
+    position: relative;
+}
+
+.social-field-group .field-help-tooltip {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: #007bff;
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    cursor: help;
+}
+
+.social-field-group .field-help-tooltip:before {
+    content: "?";
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    .oe_stat_button[name="action_update_social_score"] {
+        background: #000000;
+        border: 2px solid #ffffff;
+    }
+    
+    .profile-complete-header {
+        background: #000000;
+        border: 2px solid #ffffff;
+    }
+}

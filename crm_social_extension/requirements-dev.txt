@@ -1,0 +1,119 @@
+# Development requirements for CRM Social Extension
+# Install with: pip install -r requirements-dev.txt
+
+# Include production requirements
+-r requirements.txt
+
+# Testing frameworks
+pytest>=7.1.0
+pytest-cov>=3.0.0
+pytest-xdist>=2.5.0
+pytest-mock>=3.8.0
+pytest-html>=3.1.0
+pytest-benchmark>=3.4.0
+
+# Code formatting and linting
+black>=22.6.0
+flake8>=5.0.0
+pylint>=2.15.0
+isort>=5.10.0
+autopep8>=1.7.0
+
+# Security scanning
+bandit>=1.7.0
+safety>=2.1.0
+
+# Pre-commit hooks
+pre-commit>=2.20.0
+
+# Documentation
+sphinx>=5.1.0
+sphinx-rtd-theme>=1.0.0
+sphinx-autodoc-typehints>=1.19.0
+
+# Development tools
+ipython>=8.4.0
+jupyter>=1.0.0
+notebook>=6.4.0
+
+# Debugging tools
+pdb++>=0.10.0
+ipdb>=0.13.0
+pudb>=2022.1
+
+# Performance profiling
+memory-profiler>=0.60.0
+line-profiler>=4.0.0
+py-spy>=0.3.0
+
+# Load testing
+locust>=2.10.0
+
+# Mock and test data generation
+faker>=15.0.0
+factory-boy>=3.2.0
+responses>=0.21.0
+
+# Database testing
+pytest-postgresql>=4.1.0
+
+# Type checking
+mypy>=0.971
+types-requests>=2.28.0
+
+# Code complexity analysis
+radon>=5.1.0
+xenon>=0.9.0
+
+# Coverage reporting
+coverage[toml]>=6.4.0
+pytest-cov>=3.0.0
+
+# API testing
+httpx>=0.23.0
+respx>=0.20.0
+
+# Browser testing (for JavaScript tests)
+selenium>=4.4.0
+playwright>=1.25.0
+
+# Environment management
+python-dotenv>=0.20.0
+
+# Build tools
+build>=0.8.0
+twine>=4.0.0
+wheel>=0.37.0
+
+# Version management
+bump2version>=1.0.0
+
+# License checking
+licensecheck>=2022.7.0
+
+# Dependency analysis
+pipdeptree>=2.2.0
+pip-audit>=2.6.0
+
+# Git hooks and automation
+gitpython>=3.1.0
+
+# Performance monitoring
+psutil>=5.9.0
+
+# Configuration management
+pydantic>=1.10.0
+dynaconf>=3.1.0
+
+# Async testing
+pytest-asyncio>=0.19.0
+aioresponses>=0.7.0
+
+# Database migration testing
+alembic>=1.8.0
+
+# Static analysis
+prospector>=1.7.0
+
+# Code metrics
+vulture>=2.6.0  # Find dead code

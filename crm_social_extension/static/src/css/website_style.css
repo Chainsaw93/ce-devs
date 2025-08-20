@@ -1,0 +1,256 @@
+/* CRM Social Extension - Frontend Styles */
+
+/* Customer Showcase Page Styles */
+.customer-card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    border: 1px solid #e9ecef;
+}
+
+.customer-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+}
+
+.social-score-badge .badge {
+    font-size: 0.875rem;
+    padding: 0.5rem 0.75rem;
+}
+
+.social-links .btn {
+    min-width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.social-links .btn-outline-primary:hover {
+    background-color: #1877f2;
+    border-color: #1877f2;
+}
+
+.social-links .btn-outline-info:hover {
+    background-color: #0077b5;
+    border-color: #0077b5;
+}
+
+.social-links .btn-outline-dark:hover {
+    background-color: #1da1f2;
+    border-color: #1da1f2;
+}
+
+/* Search Suggestions */
+#search-suggestions {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 0.375rem;
+    background: white;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    margin-top: 1px;
+}
+
+#search-suggestions .list-group-item {
+    border: none;
+    border-bottom: 1px solid #f8f9fa;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+}
+
+#search-suggestions .list-group-item:hover {
+    background-color: #f8f9fa;
+}
+
+#search-suggestions .suggestion-name {
+    font-weight: 600;
+    color: #495057;
+}
+
+#search-suggestions .suggestion-platforms {
+    font-size: 0.875rem;
+    color: #6c757d;
+}
+
+#search-suggestions .suggestion-score {
+    font-size: 0.75rem;
+}
+
+/* Social Media Detail Page */
+.social-icon {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: #f8f9fa;
+}
+
+/* Stats Section */
+.stats-section .stat-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.stats-section .stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.stats-section .stat-label {
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .customer-card {
+        margin-bottom: 1.5rem;
+    }
+    
+    .social-links .btn {
+        min-width: 35px;
+        height: 35px;
+        font-size: 0.875rem;
+    }
+    
+    .display-4 {
+        font-size: 2rem;
+    }
+    
+    .display-5 {
+        font-size: 1.75rem;
+    }
+}
+
+/* Animation for badges */
+.badge {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 40px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+/* Loading states */
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Customer grid spacing */
+.customer-grid {
+    min-height: 400px;
+}
+
+/* Profile completion visual indicators */
+.profile-complete-indicator {
+    position: relative;
+}
+
+.profile-complete-indicator::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #28a745, #20c997);
+    border-radius: 0.5rem;
+    z-index: -1;
+    opacity: 0.1;
+}
+
+/* Social platform colors */
+.facebook-color { color: #1877f2 !important; }
+.linkedin-color { color: #0077b5 !important; }
+.twitter-color { color: #1da1f2 !important; }
+
+/* Card hover effects */
+.card-interactive {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.card-interactive:hover {
+    transform: scale(1.02);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Search input enhancements */
+.search-input-group {
+    position: relative;
+}
+
+.search-input-group .form-control:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Pagination styling */
+.pagination .page-link {
+    color: #495057;
+    border-color: #dee2e6;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.pagination .page-link:hover {
+    color: #0056b3;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+}
+
+/* Filter section */
+.filter-section {
+    background: linear-gradient(to right, #f8f9fa, #ffffff);
+    border-bottom: 1px solid #dee2e6;
+}
+
+/* Hero section enhancements */
+.hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+    animation: float 20s infinite linear;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0px); }
+}

@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Demo Customers with Complete Social Profiles -->
+        <record id="demo_customer_complete_1" model="res.partner">
+            <field name="name">TechCorp Solutions</field>
+            <field name="is_company">True</field>
+            <field name="website_published">True</field>
+            <field name="email">contact@techcorp.com</field>
+            <field name="phone">+1-555-0123</field>
+            <field name="website">https://www.techcorp.com</field>
+            <field name="city">San Francisco</field>
+            <field name="country_id" ref="base.us"/>
+            <field name="facebook_url">https://facebook.com/techcorpsolutions</field>
+            <field name="linkedin_url">https://linkedin.com/company/techcorp-solutions</field>
+            <field name="twitter_url">https://twitter.com/techcorpsol</field>
+            <field name="social_engagement_level">excellent</field>
+            <field name="social_notes">Highly active on all social platforms. Regular content sharing about tech innovations. Strong community engagement.</field>
+        </record>
+
+        <record id="demo_customer_complete_2" model="res.partner">
+            <field name="name">Global Marketing Inc</field>
+            <field name="is_company">True</field>
+            <field name="website_published">True</field>
+            <field name="email">hello@globalmarketing.com</field>
+            <field name="phone">+1-555-0456</field>
+            <field name="website">https://www.globalmarketing.com</field>
+            <field name="city">New York</field>
+            <field name="country_id" ref="base.us"/>
+            <field name="facebook_url">https://facebook.com/globalmarketinginc</field>
+            <field name="linkedin_url">https://linkedin.com/company/global-marketing-inc</field>
+            <field name="twitter_url">https://twitter.com/globalmarketinc</field>
+            <field name="social_engagement_level">high</field>
+            <field name="social_notes">Marketing-focused company with strong social presence. Shares industry insights and case studies regularly.</field>
+        </record>
+
+        <record id="demo_customer_complete_3" model="res.partner">
+            <field name="name">InnovateLab</field>
+            <field name="is_company">True</field>
+            <field name="website_published">True</field>
+            <field name="email">info@innovatelab.com</field>
+            <field name="phone">+1-555-0789</field>
+            <field name="website">https://www.innovatelab.com</field>
+            <field name="city">Austin</field>
+            <field name="country_id" ref="base.us"/>
+            <field name="facebook_url">https://facebook.com/innovatelabofficial</field>
+            <field name="linkedin_url">https://linkedin.com/company/innovatelab</field>
+            <field name="twitter_url">https://twitter.com/innovatelab</field>
+            <field name="social_engagement_level">excellent</field>
+            <field name="social_notes">Innovation-focused startup with viral social content. Great at showcasing their R&amp;D projects and achievements.</field>
+        </record>
+
+        <!-- Demo Customers with Incomplete Social Profiles -->
+        <record id="demo_customer_incomplete_1" model="res.partner">
+            <field name="name">Traditional Manufacturing Co</field>
+            <field name="is_company">True</field>
+            <field name="website_published">True</field>
+            <field name="email">contact@traditional-mfg.com</field>
+            <field name="phone">+1-555-1111</field>
+            <field name="website">https://www.traditional-mfg.com</field>
+            <field name="city">Detroit</field>
+            <field name="country_id" ref="base.us"/>
+            <field name="linkedin_url">https://linkedin.com/company/traditional-manufacturing</field>
+            <field name="social_engagement_level">low</field>
+            <field name="social_notes">Traditional manufacturing company. Limited social media presence, mainly uses LinkedIn for B2B networking.</field>
+        </record>
+
+        <record id="demo_customer_incomplete_2" model="res.partner">
+            <field name="name">Local Services LLC</field>
+            <field name="is_company">True</field>
+            <field name="website_published">True</field>
+            <field name="email">info@localservices.com</field>
+            <field name="phone">+1-555-2222</field>
+            <field name="city">Portland</field>
+            <field name="country_id" ref="base.us"/>
+            <field name="facebook_url">https://facebook.com/localservicesllc</field>
+            <field name="social_engagement_level">medium</field>
+            <field name="social_notes">Local service provider with Facebook presence. Opportunity to expand to LinkedIn and Twitter for business growth.</field>
+        </record>
+
+        <record id="demo_customer_incomplete_3" model="res.partner">
+            <field name="name">Startup Ventures</field>
+            <field name="is_company">True</field>
+            <field name="website_published">True</field>
+            <field name="email">team@startupventures.com</field>
+            <field name="phone">+1-555-3333</field>
+            <field name="website">https://www.startupventures.com</field>
+            <field name="city">Boston</field>
+            <field name="country_id" ref="base.us"/>
+            <field name="twitter_url">https://twitter.com/startupventures</field>
+            <field name="social_engagement_level">medium</field>
+            <field name="social_notes">Early-stage startup active on Twitter. Missing Facebook and LinkedIn presence for comprehensive market reach.</field>
+        </record>
+
+        <!-- Demo Customers with No Social Media -->
+        <record id="demo_customer_no_social_1" model="res.partner">
+            <field name="name">Conservative Corp</field>
+            <field name="is_company">True</field>
+            <field name="website_published">True</field>
+            <field name="email">contact@conservative-corp.com</field>
+            <field name="phone">+1-555-4444</field>
+            <field name="website">https://www.conservative-corp.com</field>
+            <field name="city">Dallas</field>
+            <field name="country_id" ref="base.us"/>
+            <field name="social_engagement_level">low</field>
+            <field name="social_notes">Traditional corporation with no current social media presence. High potential for digital transformation initiatives.</field>
+        </record>
+
+        <record id="demo_customer_no_social_2" model="res.partner">
+            <field name="name">Family Business Enterprises</field>
+            <field name="is_company">True</field>
+            <field name="website_published">True</field>
+            <field name="email">info@familybusiness.com</field>
+            <field name="phone">+1-555-5555</field>
+            <field name="city">Nashville</field>
+            <field name="country_id" ref="base.us"/>
+            <field name="social_engagement_level">low</field>
+            <field name="social_notes">Multi-generational family business. Opportunity to modernize marketing approach through social media adoption.</field>
+        </record>
+
+        <!-- International Customers -->
+        <record id="demo_customer_international_1" model="res.partner">
+            <field name="name">European Tech Hub</field>
+            <field name="is_company">True</field>
+            <field name="website_published">True</field>
+            <field name="email">contact@eurotechhub.eu</field>
+            <field name="phone">+49-30-12345678</field>
+            <field name="website">https://www.eurotechhub.eu</field>
+            <field name="city">Berlin</field>
+            <field name="country_id" ref="base.de"/>
+            <field name="facebook_url">https://facebook.com/eurotechhub</field>
+            <field name="linkedin_url">https://linkedin.com/company/european-tech-hub</field>
+            <field name="twitter_url">https://twitter.com/eurotechhub</field>
+            <field name="social_engagement_level">high</field>
+            <field name="social_notes">Leading European technology hub with strong multilingual social media presence across EMEA markets.</field>
+        </record>
+
+        <record id="demo_customer_international_2" model="res.partner">
+            <field name="name">Asia Pacific Innovations</field>
+            <field name="is_company">True</field>
+            <field name="website_published">True</field>
+            <field name="email">hello@apinnovations.com.sg</field>
+            <field name="phone">+65-6789-0123</field>
+            <field name="website">https://www.apinnovations.com.sg</field>
+            <field name="city">Singapore</field>
+            <field name="country_id" ref="base.sg"/>
+            <field name="linkedin_url">https://linkedin.com/company/asia-pacific-innovations</field>
+            <field name="twitter_url">https://twitter.com/apinnovations</field>
+            <field name="social_engagement_level">medium</field>
+            <field name="social_notes">Regional innovation leader in APAC. Strong LinkedIn presence, opportunity to expand Facebook reach in local markets.</field>
+        </record>
+
+        <!-- Activity Types for Social Media Follow-up -->
+        <record id="activity_type_social_follow_up" model="mail.activity.type">
+            <field name="name">Social Media Follow-up</field>
+            <field name="summary">Follow up on social media profile completion</field>
+            <field name="res_model">res.partner</field>
+            <field name="category">meeting</field>
+            <field name="delay_count">7</field>
+            <field name="delay_unit">days</field>
+            <field name="icon">fa-share-alt</field>
+        </record>
+
+        <record id="activity_type_social_engagement" model="mail.activity.type">
+            <field name="name">Social Media Engagement</field>
+            <field name="summary">Engage with customer on social media</field>
+            <field name="res_model">res.partner</field>
+            <field name="category">other</field>
+            <field name="delay_count">3</field>
+            <field name="delay_unit">days</field>
+            <field name="icon">fa-thumbs-up</field>
+        </record>
+
+        <!-- Sample Activities for Incomplete Profiles - CORREGIDO PARA ODOO 18.0 -->
+        <record id="activity_incomplete_1" model="mail.activity">
+            <field name="activity_type_id" ref="activity_type_social_follow_up"/>
+            <field name="res_id" ref="demo_customer_incomplete_1"/>
+            <field name="res_model_id" ref="base.model_res_partner"/>
+            <field name="summary">Complete social media profile for Traditional Manufacturing Co</field>
+            <field name="note">Customer has LinkedIn but missing Facebook and Twitter. Consider reaching out to gather their social media information for better engagement opportunities. Current social score: 20/100.</field>
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="date_deadline" eval="(DateTime.now() + timedelta(days=7)).strftime('%Y-%m-%d')"/>
+        </record>
+
+        <record id="activity_incomplete_2" model="mail.activity">
+            <field name="activity_type_id" ref="activity_type_social_follow_up"/>
+            <field name="res_id" ref="demo_customer_incomplete_2"/>
+            <field name="res_model_id" ref="base.model_res_partner"/>
+            <field name="summary">Complete social media profile for Local Services LLC</field>
+            <field name="note">Customer has Facebook but missing LinkedIn and Twitter. LinkedIn could help with B2B networking and Twitter for customer service. Current social score: 20/100.</field>
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="date_deadline" eval="(DateTime.now() + timedelta(days=5)).strftime('%Y-%m-%d')"/>
+        </record>
+
+        <record id="activity_no_social" model="mail.activity">
+            <field name="activity_type_id" ref="activity_type_social_follow_up"/>
+            <field name="res_id" ref="demo_customer_no_social_1"/>
+            <field name="res_model_id" ref="base.model_res_partner"/>
+            <field name="summary">Introduce social media marketing to Conservative Corp</field>
+            <field name="note">Customer has no social media presence. High potential for digital transformation. Consider scheduling consultation to discuss social media strategy benefits. Current social score: 0/100.</field>
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="date_deadline" eval="(DateTime.now() + timedelta(days=10)).strftime('%Y-%m-%d')"/>
+        </record>
+
+    </data>
+</odoo>

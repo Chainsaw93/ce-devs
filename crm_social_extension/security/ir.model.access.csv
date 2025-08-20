@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_partner_social_user,res.partner.social.user,base.model_res_partner,crm_social_extension.group_social_user,1,1,1,0
+access_partner_social_manager,res.partner.social.manager,base.model_res_partner,crm_social_extension.group_social_manager,1,1,1,1
+access_partner_social_base_user,res.partner.social.base.user,base.model_res_partner,base.group_user,1,1,1,0
+access_partner_social_portal,res.partner.social.portal,base.model_res_partner,base.group_portal,1,0,0,0
+access_partner_social_public,res.partner.social.public,base.model_res_partner,base.group_public,1,0,0,0
+access_mail_activity_social_user,mail.activity.social.user,mail.model_mail_activity,crm_social_extension.group_social_user,1,1,1,1
+access_mail_activity_type_social_user,mail.activity.type.social.user,mail.model_mail_activity_type,crm_social_extension.group_social_user,1,1,1,0

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Partner Form View - Add Social Media Tab -->
+    <record id="view_partner_form_social" model="ir.ui.view">
+        <field name="name">res.partner.form.social</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            
+            <!-- Add Social Score button in button box -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_update_social_score"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-line-chart">
+                    <field name="social_score" widget="statinfo" 
+                           string="Social Score"/>
+                </button>
+            </xpath>
+
+            <!-- Add Social Media Tab -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Social Media" name="social_media">
+                    <group>
+                        <group name="social_urls" string="Social Media URLs">
+                            <field name="facebook_url" 
+                                   widget="url" 
+                                   placeholder="https://facebook.com/yourpage"/>
+                            <field name="linkedin_url" 
+                                   widget="url" 
+                                   placeholder="https://linkedin.com/in/yourprofile"/>
+                            <field name="twitter_url" 
+                                   widget="url" 
+                                   placeholder="https://twitter.com/yourusername"/>
+                        </group>
+                        
+                        <group name="social_analytics" string="Social Analytics">
+                            <field name="is_profile_complete" readonly="1"/>
+                            <field name="social_score" readonly="1"/>
+                            <field name="social_engagement_level"/>
+                            <field name="last_social_update" readonly="1"/>
+                        </group>
+                    </group>
+                    
+                    <group name="social_automation" string="Marketing Automation">
+                        <field name="auto_follow_up"/>
+                    </group>
+                    
+                    <group name="social_notes" string="Social Media Notes">
+                        <field name="social_notes" nolabel="1" 
+                               placeholder="Add notes about social media presence, engagement patterns, etc."/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Partner List View - Add Profile Complete Column -->
+    <record id="view_partner_tree_social" model="ir.ui.view">
+        <field name="name">res.partner.tree.social</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='email']" position="after">
+                <field name="is_profile_complete" 
+                       widget="boolean_favorite" 
+                       string="Complete Profile"/>
+                <field name="social_score" string="Social Score"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Partner Search View - Add Social Media Filters -->
+    <record id="view_partner_search_social" model="ir.ui.view">
+        <field name="name">res.partner.search.social</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            
+            <!-- Add search fields -->
+            <xpath expr="//field[@name='category_id']" position="after">
+                <field name="facebook_url" string="Facebook"/>
+                <field name="linkedin_url" string="LinkedIn"/> 
+                <field name="twitter_url" string="Twitter"/>
+                <field name="social_score" string="Social Score"/>
+            </xpath>
+
+            <!-- Add filters -->
+            <xpath expr="//filter[@name='supplier']" position="after">
+                <separator/>
+                <filter name="profile_complete" 
+                        string="Complete Profile" 
+                        domain="[('is_profile_complete', '=', True)]"/>
+                <filter name="profile_incomplete" 
+                        string="Incomplete Profile" 
+                        domain="[('is_profile_complete', '=', False)]"/>
+                <filter name="high_social_score" 
+                        string="High Social Score" 
+                        domain="[('social_score', '>', 80)]"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

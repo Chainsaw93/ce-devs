@@ -1,0 +1,518 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Customer Showcase Main Page -->
+    <template id="customer_showcase_page" name="Customer Showcase">
+        <t t-call="website.layout">
+            <t t-set="title">Our Customers</t>
+            <t t-set="additional_title">Social Media Connected Customers</t>
+            
+            <div id="wrap" class="oe_structure oe_empty">
+                
+                <!-- Hero Section -->
+                <section class="pt-5 pb-3 bg-primary text-white">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-8 mx-auto text-center">
+                                <h1 class="display-4 mb-3">Our Amazing Customers</h1>
+                                <p class="lead mb-4">
+                                    Discover our valued customers and connect with them on social media. 
+                                    Building relationships that go beyond business.
+                                </p>
+                                
+                                <!-- Stats Row -->
+                                <div class="row text-center mt-4">
+                                    <div class="col-md-4">
+                                        <div class="bg-white bg-opacity-20 rounded p-3">
+                                            <h3 class="mb-1" t-esc="total_customers"/>
+                                            <small>Total Customers</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="bg-white bg-opacity-20 rounded p-3">
+                                            <h3 class="mb-1" t-esc="len([c for c in customers if c.is_profile_complete])"/>
+                                            <small>Complete Profiles</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="bg-white bg-opacity-20 rounded p-3">
+                                            <h3 class="mb-1" t-esc="len([c for c in customers if c.social_score > 80])"/>
+                                            <small>High Social Score</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Search and Filter Section -->
+                <section class="py-4 bg-light">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <form method="get" action="/customers" class="row g-3 align-items-end">
+                                    
+                                    <!-- Search Input -->
+                                    <div class="col-md-4">
+                                        <label for="search" class="form-label">Search Customers</label>
+                                        <div class="input-group">
+                                            <input type="text" 
+                                                   class="form-control" 
+                                                   id="search" 
+                                                   name="search" 
+                                                   t-att-value="search"
+                                                   placeholder="Search by name or social media..."
+                                                   autocomplete="off"/>
+                                            <button class="btn btn-outline-secondary" type="submit">
+                                                <i class="fa fa-search"/>
+                                            </button>
+                                        </div>
+                                        <div id="search-suggestions" class="list-group position-absolute w-100" style="z-index: 1000; display: none;"></div>
+                                    </div>
+                                    
+                                    <!-- Profile Filter -->
+                                    <div class="col-md-3">
+                                        <label for="filter_complete" class="form-label">Profile Status</label>
+                                        <select name="filter_complete" class="form-select">
+                                            <option value="all" t-att-selected="'selected' if filter_complete == 'all' else None">
+                                                All Customers
+                                            </option>
+                                            <option value="complete" t-att-selected="'selected' if filter_complete == 'complete' else None">
+                                                Complete Profiles
+                                            </option>
+                                            <option value="incomplete" t-att-selected="'selected' if filter_complete == 'incomplete' else None">
+                                                Incomplete Profiles
+                                            </option>
+                                        </select>
+                                    </div>
+                                    
+                                    <!-- Sort Options -->
+                                    <div class="col-md-3">
+                                        <label for="sort" class="form-label">Sort By</label>
+                                        <select name="sort" class="form-select">
+                                            <option value="name" t-att-selected="'selected' if sort == 'name' else None">
+                                                Name (A-Z)
+                                            </option>
+                                            <option value="social_score" t-att-selected="'selected' if sort == 'social_score' else None">
+                                                Social Score (High to Low)
+                                            </option>
+                                            <option value="recent" t-att-selected="'selected' if sort == 'recent' else None">
+                                                Recently Updated
+                                            </option>
+                                        </select>
+                                    </div>
+                                    
+                                    <!-- Submit Button -->
+                                    <div class="col-md-2">
+                                        <button type="submit" class="btn btn-primary w-100">
+                                            <i class="fa fa-filter me-1"/>
+                                            Filter
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Results Info -->
+                <section class="py-3">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h5 class="mb-0">
+                                            <span t-esc="total_customers"/> customers found
+                                            <t t-if="search">
+                                                for "<strong t-esc="search"/>"
+                                            </t>
+                                        </h5>
+                                        <small class="text-muted">
+                                            Showing page <span t-esc="page"/> of <span t-esc="total_pages"/>
+                                        </small>
+                                    </div>
+                                    
+                                    <!-- Quick Stats -->
+                                    <div class="d-none d-md-block">
+                                        <span class="badge bg-success me-2">
+                                            <i class="fa fa-check-circle me-1"/>
+                                            <span t-esc="len([c for c in customers if c.is_profile_complete])"/> Complete
+                                        </span>
+                                        <span class="badge bg-warning">
+                                            <i class="fa fa-star me-1"/>
+                                            Avg Score: <span t-esc="round(sum(c.social_score for c in customers) / len(customers) if customers else 0)"/>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Customer Grid -->
+                <section class="py-4">
+                    <div class="container">
+                        <div class="row">
+                            <t t-if="not customers">
+                                <div class="col-12 text-center py-5">
+                                    <i class="fa fa-search fa-3x text-muted mb-3"/>
+                                    <h4>No customers found</h4>
+                                    <p class="text-muted">
+                                        Try adjusting your search terms or filters.
+                                    </p>
+                                    <a href="/customers" class="btn btn-primary">
+                                        Show All Customers
+                                    </a>
+                                </div>
+                            </t>
+                            
+                            <t t-foreach="customers" t-as="customer">
+                                <div class="col-lg-4 col-md-6 mb-4">
+                                    <div class="card h-100 shadow-sm customer-card">
+                                        <div class="card-body">
+                                            <!-- Customer Header -->
+                                            <div class="d-flex align-items-start mb-3">
+                                                <div class="flex-grow-1">
+                                                    <h5 class="card-title mb-1">
+                                                        <a t-att-href="'/customers/%s' % customer.id" 
+                                                           class="text-decoration-none">
+                                                            <span t-field="customer.name"/>
+                                                        </a>
+                                                    </h5>
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <t t-if="customer.is_profile_complete">
+                                                            <span class="badge bg-success">
+                                                                <i class="fa fa-check-circle me-1"/>
+                                                                Complete Profile
+                                                            </span>
+                                                        </t>
+                                                        <t t-else="">
+                                                            <span class="badge bg-warning">
+                                                                <i class="fa fa-exclamation-triangle me-1"/>
+                                                                Incomplete
+                                                            </span>
+                                                        </t>
+                                                    </div>
+                                                </div>
+                                                <div class="text-end">
+                                                    <div class="social-score-badge">
+                                                        <span class="badge bg-primary">
+                                                            <i class="fa fa-line-chart me-1"/>
+                                                            <span t-esc="customer.social_score"/>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Customer Info -->
+                                            <div class="customer-info mb-3">
+                                                <t t-if="customer.city or customer.country_id">
+                                                    <p class="text-muted mb-2">
+                                                        <i class="fa fa-map-marker me-1"/>
+                                                        <span t-if="customer.city" t-esc="customer.city"/>
+                                                        <span t-if="customer.city and customer.country_id">, </span>
+                                                        <span t-if="customer.country_id" t-esc="customer.country_id.name"/>
+                                                    </p>
+                                                </t>
+                                                
+                                                <t t-if="customer.social_engagement_level">
+                                                    <p class="mb-2">
+                                                        <i class="fa fa-users me-1"/>
+                                                        <span class="text-capitalize" t-esc="customer.social_engagement_level"/> Engagement
+                                                    </p>
+                                                </t>
+                                            </div>
+
+                                            <!-- Social Media Links -->
+                                            <div class="social-links mb-3">
+                                                <h6 class="mb-2">Social Media</h6>
+                                                <div class="d-flex gap-2">
+                                                    <t t-if="customer.facebook_url">
+                                                        <a t-att-href="customer.facebook_url" 
+                                                           target="_blank" 
+                                                           class="btn btn-sm btn-outline-primary"
+                                                           title="Facebook">
+                                                            <i class="fa fa-facebook"/>
+                                                        </a>
+                                                    </t>
+                                                    <t t-if="customer.linkedin_url">
+                                                        <a t-att-href="customer.linkedin_url" 
+                                                           target="_blank" 
+                                                           class="btn btn-sm btn-outline-info"
+                                                           title="LinkedIn">
+                                                            <i class="fa fa-linkedin"/>
+                                                        </a>
+                                                    </t>
+                                                    <t t-if="customer.twitter_url">
+                                                        <a t-att-href="customer.twitter_url" 
+                                                           target="_blank" 
+                                                           class="btn btn-sm btn-outline-dark"
+                                                           title="Twitter">
+                                                            <i class="fa fa-twitter"/>
+                                                        </a>
+                                                    </t>
+                                                    
+                                                    <t t-if="not (customer.facebook_url or customer.linkedin_url or customer.twitter_url)">
+                                                        <small class="text-muted">No social media links available</small>
+                                                    </t>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Card Footer -->
+                                        <div class="card-footer bg-transparent">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <small class="text-muted">
+                                                    <t t-if="customer.last_social_update">
+                                                        Updated <span t-esc="customer.last_social_update.strftime('%b %d, %Y')"/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        No recent updates
+                                                    </t>
+                                                </small>
+                                                <a t-att-href="'/customers/%s' % customer.id" 
+                                                   class="btn btn-sm btn-primary">
+                                                    View Details
+                                                    <i class="fa fa-arrow-right ms-1"/>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Pagination -->
+                <t t-if="total_pages > 1">
+                    <section class="py-4">
+                        <div class="container">
+                            <nav aria-label="Customer pagination">
+                                <ul class="pagination justify-content-center">
+                                    <li t-att-class="'page-item' + (' disabled' if not has_prev else '')">
+                                        <a class="page-link" 
+                                           t-att-href="'/customers?page=%s&amp;search=%s&amp;sort=%s&amp;filter_complete=%s' % (prev_page or 1, search, sort, filter_complete)"
+                                           t-att-aria-disabled="'true' if not has_prev else None">
+                                            <i class="fa fa-chevron-left"/>
+                                            Previous
+                                        </a>
+                                    </li>
+                                    
+                                    <t t-foreach="page_range" t-as="page_num">
+                                        <li t-att-class="'page-item' + (' active' if page_num == page else '')">
+                                            <a class="page-link" 
+                                               t-att-href="'/customers?page=%s&amp;search=%s&amp;sort=%s&amp;filter_complete=%s' % (page_num, search, sort, filter_complete)">
+                                                <span t-esc="page_num"/>
+                                            </a>
+                                        </li>
+                                    </t>
+                                    
+                                    <li t-att-class="'page-item' + (' disabled' if not has_next else '')">
+                                        <a class="page-link" 
+                                           t-att-href="'/customers?page=%s&amp;search=%s&amp;sort=%s&amp;filter_complete=%s' % (next_page or total_pages, search, sort, filter_complete)"
+                                           t-att-aria-disabled="'true' if not has_next else None">
+                                            Next
+                                            <i class="fa fa-chevron-right"/>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </section>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <!-- Individual Customer Detail Page -->
+    <template id="customer_detail_page" name="Customer Detail">
+        <t t-call="website.layout">
+            <t t-set="title" t-value="customer.name"/>
+            <t t-set="additional_title">Customer Profile</t>
+            
+            <div id="wrap" class="oe_structure oe_empty">
+                
+                <!-- Breadcrumb -->
+                <section class="py-3 bg-light">
+                    <div class="container">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb mb-0">
+                                <li class="breadcrumb-item">
+                                    <a href="/customers">Customers</a>
+                                </li>
+                                <li class="breadcrumb-item active" aria-current="page" t-esc="customer.name"/>
+                            </ol>
+                        </nav>
+                    </div>
+                </section>
+
+                <!-- Customer Header -->
+                <section class="py-5">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-8 mx-auto text-center">
+                                <h1 class="display-5 mb-3" t-field="customer.name"/>
+                                
+                                <div class="d-flex justify-content-center gap-3 mb-4">
+                                    <t t-if="customer.is_profile_complete">
+                                        <span class="badge bg-success fs-6">
+                                            <i class="fa fa-check-circle me-2"/>
+                                            Complete Profile
+                                        </span>
+                                    </t>
+                                    <span class="badge bg-primary fs-6">
+                                        <i class="fa fa-line-chart me-2"/>
+                                        Social Score: <span t-esc="customer.social_score"/>
+                                    </span>
+                                    <span class="badge bg-info fs-6 text-capitalize">
+                                        <i class="fa fa-users me-2"/>
+                                        <span t-esc="customer.social_engagement_level"/> Engagement
+                                    </span>
+                                </div>
+
+                                <t t-if="customer.city or customer.country_id">
+                                    <p class="lead text-muted">
+                                        <i class="fa fa-map-marker me-2"/>
+                                        <span t-if="customer.city" t-esc="customer.city"/>
+                                        <span t-if="customer.city and customer.country_id">, </span>
+                                        <span t-if="customer.country_id" t-esc="customer.country_id.name"/>
+                                    </p>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Customer Details -->
+                <section class="py-5 bg-light">
+                    <div class="container">
+                        <div class="row">
+                            
+                            <!-- Social Media Section -->
+                            <div class="col-lg-6 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-header">
+                                        <h4 class="mb-0">
+                                            <i class="fa fa-share-alt me-2"/>
+                                            Social Media Presence
+                                        </h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <t t-set="social_data" t-value="customer.get_social_media_data()"/>
+                                        
+                                        <t t-if="social_data">
+                                            <div class="row">
+                                                <t t-foreach="social_data" t-as="social">
+                                                    <div class="col-12 mb-3">
+                                                        <div class="d-flex align-items-center p-3 bg-light rounded">
+                                                            <div class="social-icon me-3">
+                                                                <i t-att-class="'fa %s fa-2x' % social['icon']"
+                                                                   t-att-style="'color: %s' % ('#1877f2' if social['platform'] == 'facebook' else '#0077b5' if social['platform'] == 'linkedin' else '#1da1f2')"/>
+                                                            </div>
+                                                            <div class="flex-grow-1">
+                                                                <h6 class="mb-1" t-esc="social['name']"/>
+                                                                <small class="text-muted" t-esc="social['url']"/>
+                                                            </div>
+                                                            <a t-att-href="social['url']" 
+                                                               target="_blank" 
+                                                               class="btn btn-sm btn-outline-primary">
+                                                                Visit
+                                                                <i class="fa fa-external-link ms-1"/>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </t>
+                                            </div>
+                                        </t>
+                                        <t t-else="">
+                                            <div class="text-center py-4">
+                                                <i class="fa fa-share-alt fa-3x text-muted mb-3"/>
+                                                <p class="text-muted">No social media information available</p>
+                                            </div>
+                                        </t>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Customer Information -->
+                            <div class="col-lg-6 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-header">
+                                        <h4 class="mb-0">
+                                            <i class="fa fa-info-circle me-2"/>
+                                            Company Information
+                                        </h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <t t-if="customer.website">
+                                            <div class="mb-3">
+                                                <strong>Website:</strong>
+                                                <a t-att-href="customer.website" 
+                                                   target="_blank" 
+                                                   class="ms-2">
+                                                    <span t-esc="customer.website"/>
+                                                    <i class="fa fa-external-link ms-1"/>
+                                                </a>
+                                            </div>
+                                        </t>
+                                        
+                                        <t t-if="customer.email">
+                                            <div class="mb-3">
+                                                <strong>Email:</strong>
+                                                <a t-att-href="'mailto:%s' % customer.email" class="ms-2">
+                                                    <span t-esc="customer.email"/>
+                                                </a>
+                                            </div>
+                                        </t>
+                                        
+                                        <t t-if="customer.phone">
+                                            <div class="mb-3">
+                                                <strong>Phone:</strong>
+                                                <a t-att-href="'tel:%s' % customer.phone" class="ms-2">
+                                                    <span t-esc="customer.phone"/>
+                                                </a>
+                                            </div>
+                                        </t>
+
+                                        <t t-if="customer.social_notes">
+                                            <div class="mt-4">
+                                                <strong>Social Media Notes:</strong>
+                                                <p class="mt-2" t-esc="customer.social_notes"/>
+                                            </div>
+                                        </t>
+
+                                        <div class="mt-4">
+                                            <small class="text-muted">
+                                                Last updated: 
+                                                <t t-if="customer.last_social_update">
+                                                    <span t-esc="customer.last_social_update.strftime('%B %d, %Y at %I:%M %p')"/>
+                                                </t>
+                                                <t t-else="">
+                                                    Never
+                                                </t>
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Back to Customers -->
+                <section class="py-4">
+                    <div class="container text-center">
+                        <a href="/customers" class="btn btn-outline-primary">
+                            <i class="fa fa-arrow-left me-2"/>
+                            Back to All Customers
+                        </a>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+
+</odoo>

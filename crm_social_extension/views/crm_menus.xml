@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Social Media Analysis Action -->
+    <record id="action_partner_social_analysis" model="ir.actions.act_window">
+        <field name="name">Social Media Analysis</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list,form,kanban,graph,pivot</field>
+        <field name="domain">[('is_company', '=', True)]</field>
+        <field name="context">{
+            'search_default_customers': 1,
+            'search_default_group_by_profile_complete': 1,
+            'show_social_score': True
+        }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Analyze customer social media presence
+            </p>
+            <p>
+                Track and analyze your customers' social media presence and engagement levels.
+                Use this data to improve your marketing and communication strategies.
+            </p>
+        </field>
+    </record>
+
+    <!-- High Social Score Customers Action -->
+    <record id="action_partner_high_social_score" model="ir.actions.act_window">
+        <field name="name">High Social Score Customers</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('is_company', '=', True), ('social_score', '>', 80)]</field>
+        <field name="context">{
+            'search_default_customers': 1,
+            'show_social_score': True
+        }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No high-scoring customers yet!
+            </p>
+            <p>
+                Customers with social scores above 80 are your most socially engaged clients.
+                Focus on maintaining and leveraging these relationships for business growth.
+            </p>
+        </field>
+    </record>
+
+    <!-- Incomplete Profiles Action -->
+    <record id="action_partner_incomplete_profiles" model="ir.actions.act_window">
+        <field name="name">Incomplete Social Profiles</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list,form,kanban</field>
+        <field name="domain">[('is_company', '=', True), ('is_profile_complete', '=', False)]</field>
+        <field name="context">{
+            'search_default_customers': 1,
+            'show_social_score': True,
+            'default_auto_follow_up': True
+        }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                All customer profiles are complete!
+            </p>
+            <p>
+                Track customers with incomplete social media profiles and take action
+                to gather missing information for better engagement opportunities.
+            </p>
+        </field>
+    </record>
+
+    <!-- Social Activities Action -->
+    <record id="action_social_activities" model="ir.actions.act_window">
+        <field name="name">Social Media Activities</field>
+        <field name="res_model">mail.activity</field>
+        <field name="view_mode">list,form,calendar</field>
+        <field name="domain">[('activity_type_id.name', 'ilike', 'social')]</field>
+        <field name="context">{
+            'search_default_my_activities': 1,
+            'search_default_today': 1
+        }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No social media activities scheduled
+            </p>
+            <p>
+                Manage and track all social media related activities and follow-ups.
+                Stay on top of your customer engagement strategy.
+            </p>
+        </field>
+    </record>
+
+    <!-- 🎯 MENU PRINCIPAL - Usa NUESTROS grupos propios -->
+    <menuitem id="menu_social_media_root"
+              name="Social Media"
+              web_icon="crm_social_extension,static/description/icon.png"
+              sequence="85"
+              groups="crm_social_extension.group_social_user"/>
+
+    <!-- Submenús -->
+    <menuitem id="menu_social_analysis"
+              name="Customer Analysis"
+              parent="menu_social_media_root"
+              action="action_partner_social_analysis"
+              sequence="10"
+              groups="crm_social_extension.group_social_user"/>
+
+    <menuitem id="menu_high_social_score"
+              name="High Social Score"
+              parent="menu_social_media_root"
+              action="action_partner_high_social_score"
+              sequence="20"
+              groups="crm_social_extension.group_social_user"/>
+
+    <menuitem id="menu_incomplete_profiles"
+              name="Incomplete Profiles"
+              parent="menu_social_media_root"
+              action="action_partner_incomplete_profiles"
+              sequence="30"
+              groups="crm_social_extension.group_social_user"/>
+
+    <menuitem id="menu_social_activities"
+              name="Social Activities"
+              parent="menu_social_media_root"
+              action="action_social_activities"
+              sequence="40"
+              groups="crm_social_extension.group_social_user"/>
+
+    <!-- 🔧 Server Actions - Solo para managers -->
+    <record id="action_server_update_social_scores" model="ir.actions.server">
+        <field name="name">Update Social Scores</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="binding_model_id" ref="base.model_res_partner"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+records._compute_social_score()
+env.user.notify_success("Social scores updated successfully")
+        </field>
+        <field name="groups_id" eval="[(4, ref('crm_social_extension.group_social_manager'))]"/>
+    </record>
+
+    <record id="action_server_create_social_activities" model="ir.actions.server">
+        <field name="name">Create Social Follow-up Activities</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="binding_model_id" ref="base.model_res_partner"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+incomplete_partners = records.filtered(lambda p: not p.is_profile_complete and p.auto_follow_up)
+for partner in incomplete_partners:
+    partner._create_social_follow_up_activity()
+env.user.notify_success(f"Created follow-up activities for {len(incomplete_partners)} customers")
+        </field>
+        <field name="groups_id" eval="[(4, ref('crm_social_extension.group_social_manager'))]"/>
+    </record>
+
+    <!-- 📊 Dashboard (opcional) -->
+    <record id="board_social_media_form" model="ir.ui.view">
+        <field name="name">Social Media Dashboard</field>
+        <field name="model">board.board</field>
+        <field name="arch" type="xml">
+            <form string="Social Media Dashboard">
+                <board style="2-1">
+                    <column>
+                        <action name="%(action_partner_social_analysis)d" 
+                                string="Social Media Analysis"
+                                view_mode="graph"
+                                height="400"/>
+                        <action name="%(action_partner_incomplete_profiles)d"
+                                string="Incomplete Profiles"
+                                view_mode="list"
+                                height="300"/>
+                    </column>
+                    <column>
+                        <action name="%(action_social_activities)d"
+                                string="Social Activities"
+                                view_mode="calendar"
+                                height="350"/>
+                        <action name="%(action_partner_high_social_score)d"
+                                string="Top Social Customers"
+                                view_mode="kanban"
+                                height="350"/>
+                    </column>
+                </board>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_social_dashboard" model="ir.actions.act_window">
+        <field name="name">Social Media Dashboard</field>
+        <field name="res_model">board.board</field>
+        <field name="view_mode">form</field>
+        <field name="usage">menu</field>
+        <field name="view_id" ref="board_social_media_form"/>
+    </record>
+
+    <menuitem id="menu_social_dashboard"
+              name="Dashboard"
+              parent="menu_social_media_root"
+              action="action_social_dashboard"
+              sequence="5"
+              groups="crm_social_extension.group_social_manager"/>
+
+</odoo>

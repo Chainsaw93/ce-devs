@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data noupdate="1">
+
+<!-- CREATE OUR OWN GROUPS -->
+<record id="group_social_user" model="res.groups">
+    <field name="name">Social Media User</field>
+    <field name="category_id" ref="base.module_category_marketing"/>
+    <field name="comment">Can view and edit social media information</field>
+</record>
+
+<record id="group_social_manager" model="res.groups">
+    <field name="name">Social Media Manager</field>
+    <field name="category_id" ref="base.module_category_marketing"/>
+    <field name="implied_ids" eval="[(4, ref('group_social_user'))]"/>
+    <field name="comment">Full access to social media features</field>
+</record>
+
+<!-- Activity Types - SOLO CAMPOS BÁSICOS -->
+<record id="mail_activity_type_social_follow_up" model="mail.activity.type">
+    <field name="name">Social Media Follow-up</field>
+    <field name="summary">Follow up on social media profile completion</field>
+    <field name="res_model">res.partner</field>
+</record>
+
+<record id="mail_activity_type_social_engagement" model="mail.activity.type">
+    <field name="name">Social Media Engagement</field>
+    <field name="summary">Engage with customer on social media platforms</field>
+    <field name="res_model">res.partner</field>
+</record>
+
+<!-- System Parameters for Social Scoring -->
+<record id="social_scoring_facebook_points" model="ir.config_parameter">
+    <field name="key">crm_social_extension.facebook_points</field>
+    <field name="value">20</field>
+</record>
+
+<record id="social_scoring_linkedin_points" model="ir.config_parameter">
+    <field name="key">crm_social_extension.linkedin_points</field>
+    <field name="value">20</field>
+</record>
+
+<record id="social_scoring_twitter_points" model="ir.config_parameter">
+    <field name="key">crm_social_extension.twitter_points</field>
+    <field name="value">20</field>
+</record>
+
+<record id="social_scoring_completion_bonus" model="ir.config_parameter">
+    <field name="key">crm_social_extension.completion_bonus</field>
+    <field name="value">20</field>
+</record>
+
+<!-- Website Menu for Customer Showcase -->
+<record id="website_menu_customers" model="website.menu">
+    <field name="name">Our Customers</field>
+    <field name="url">/customers</field>
+    <field name="parent_id" ref="website.main_menu"/>
+    <field name="sequence">50</field>
+</record>
+
+<!-- Email Template for Social Media Follow-up -->
+<record id="email_template_social_follow_up" model="mail.template">
+    <field name="name">Social Media Follow-up Request</field>
+    <field name="model_id" ref="base.model_res_partner"/>
+    <field name="subject">Complete Your Social Media Profile - {{ object.name }}</field>
+    <field name="email_from">{{ (object.user_id.email or user.email) }}</field>
+    <field name="email_to">{{ object.email }}</field>
+    <field name="body_html" type="html">
+        <div style="margin: 0px; padding: 0px;">
+            <p>Dear {{ object.name }},</p>
+            
+            <p>We noticed that your social media profile in our system is incomplete. 
+            To help us better serve you and expand our network, we'd love to connect 
+            with you on social media platforms.</p>
+            
+            <p>Please share your social media URLs with us by replying to this email.</p>
+            
+            <p>Thank you!</p>
+            
+            <p>Best regards,<br/>
+            {{ user.signature | safe }}
+            </p>
+        </div>
+    </field>
+    <field name="lang">{{ object.lang }}</field>
+    <field name="auto_delete">True</field>
+</record>
+
+</data>
+</odoo>

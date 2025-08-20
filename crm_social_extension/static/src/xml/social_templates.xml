@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+
+    <!-- Social URL Field Template -->
+    <t t-name="crm_social_extension.SocialUrlField" owl="1">
+        <div t-att-class="classNames">
+            <div class="d-flex align-items-center">
+                <div class="social-platform-icon me-2" t-if="socialPlatform">
+                    <i t-att-class="'fa ' + platformConfig.icon" 
+                       t-att-style="'color: ' + platformConfig.color"/>
+                </div>
+                <div class="flex-grow-1">
+                    <input t-ref="input"
+                           class="o_input"
+                           t-att-type="inputType"
+                           t-att-placeholder="placeholder"
+                           t-att-value="formattedValue"
+                           t-on-input="onChange"
+                           t-on-blur="onBlur"/>
+                </div>
+                <div class="social-validation-indicator ms-2">
+                    <i t-if="state.isValidating" class="fa fa-spinner fa-spin text-info"/>
+                    <i t-elif="!state.isValid and formattedValue" class="fa fa-exclamation-triangle text-warning"/>
+                    <i t-elif="state.isValid and formattedValue" class="fa fa-check text-success"/>
+                </div>
+            </div>
+            <div t-if="state.previewData" class="social-preview mt-2 p-2 bg-light rounded">
+                <small class="text-muted">
+                    <i class="fa fa-external-link me-1"/>
+                    Preview: <span t-esc="state.previewData.title"/>
+                </small>
+            </div>
+        </div>
+    </t>
+
+    <!-- Social Score Field Template -->
+    <t t-name="crm_social_extension.SocialScoreField" owl="1">
+        <div class="o_field_social_score">
+            <div class="d-flex align-items-center">
+                <div class="social-score-value me-3">
+                    <span class="score-number fw-bold" t-esc="state.animatedValue"/>
+                    <span class="score-max text-muted">/100</span>
+                </div>
+                <div class="social-score-level">
+                    <i t-att-class="'fa ' + scoreLevelConfig.icon + ' me-1'" 
+                       t-att-style="'color: ' + scoreLevelConfig.color"/>
+                    <span t-esc="scoreLevelConfig.label" 
+                          t-att-style="'color: ' + scoreLevelConfig.color"/>
+                </div>
+            </div>
+            <div class="social-score-progress mt-2">
+                <div class="progress" style="height: 6px;">
+                    <div class="progress-bar" 
+                         t-att-style="'width: ' + progressPercentage + '%; background-color: ' + scoreLevelConfig.color"/>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <!-- Profile Complete Field Template -->
+    <t t-name="crm_social_extension.ProfileCompleteField" owl="1">
+        <div class="o_field_profile_complete">
+            <div class="d-flex align-items-center">
+                <div class="profile-status me-2">
+                    <i t-if="props.value" class="fa fa-check-circle text-success fa-lg"/>
+                    <i t-else="" class="fa fa-exclamation-circle text-warning fa-lg"/>
+                </div>
+                <div class="profile-info">
+                    <div class="profile-status-text">
+                        <span t-if="props.value" class="text-success fw-bold">Profile Complete</span>
+                        <span t-else="" class="text-warning fw-bold">Profile Incomplete</span>
+                    </div>
+                    <div class="profile-completion-percentage">
+                        <small class="text-muted">
+                            <span t-esc="completionPercentage"/>% complete
+                            <span t-if="state.missingPlatforms.length > 0">
+                                (Missing: <span t-esc="state.missingPlatforms.join(', ')"/>)
+                            </span>
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <!-- Social Media Dashboard Template -->
+    <t t-name="crm_social_extension.SocialMediaDashboard" owl="1">
+        <div class="social-media-dashboard">
+            <div t-if="state.isLoading" class="text-center p-4">
+                <i class="fa fa-spinner fa-spin fa-2x"/>
+                <div class="mt-2">Loading social media data...</div>
+            </div>
+            
+            <div t-else="" class="social-dashboard-content">
+                <!-- Social Platforms Overview -->
+                <div class="social-platforms-grid mb-4">
+                    <div class="row">
+                        <div t-foreach="socialPlatforms" t-as="platform" t-key="platform.name" 
+                             class="col-md-4 mb-3">
+                            <div class="social-platform-card p-3 border rounded">
+                                <div class="d-flex align-items-center">
+                                    <i t-att-class="'fa ' + platform.icon + ' fa-2x me-3'"
+                                       t-att-style="'color: ' + platform.color"/>
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-1" t-esc="platform.name"/>
+                                        <div t-if="platform.present" class="text-success">
+                                            <i class="fa fa-check me-1"/>Connected
+                                        </div>
+                                        <div t-else="" class="text-muted">
+                                            <i class="fa fa-times me-1"/>Not connected
+                                        </div>
+                                    </div>
+                                </div>
+                                <div t-if="platform.url" class="mt-2">
+                                    <a t-att-href="platform.url" target="_blank" 
+                                       class="btn btn-sm btn-outline-primary">
+                                        <i class="fa fa-external-link me-1"/>Visit
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Social Score and Actions -->
+                <div class="social-score-section mb-4">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Social Media Score</h5>
+                            <button class="btn btn-primary btn-sm" t-on-click="refreshSocialScore">
+                                <i class="fa fa-refresh me-1"/>Refresh
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="social-score-display text-center">
+                                        <div class="score-circle">
+                                            <span class="score-value display-4 fw-bold" t-esc="state.socialData.social_score || 0"/>
+                                            <span class="score-max h5 text-muted">/100</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="score-breakdown">
+                                        <div class="score-item d-flex justify-content-between mb-2">
+                                            <span>Platform Coverage:</span>
+                                            <span t-esc="socialPlatforms.filter(p => p.present).length + '/3'"/>
+                                        </div>
+                                        <div class="score-item d-flex justify-content-between mb-2">
+                                            <span>Engagement Level:</span>
+                                            <span class="text-capitalize" t-esc="state.socialData.social_engagement_level || 'Low'"/>
+                                        </div>
+                                        <div class="score-item d-flex justify-content-between">
+                                            <span>Profile Status:</span>
+                                            <span t-if="state.socialData.is_profile_complete" class="text-success">Complete</span>
+                                            <span t-else="" class="text-warning">Incomplete</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Related Activities -->
+                <div t-if="state.activities.length > 0" class="social-activities-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Social Media Activities</h5>
+                        </div>
+                        <div class="card-body">
+                            <div t-foreach="state.activities" t-as="activity" t-key="activity.id"
+                                 class="activity-item p-2 border-bottom">
+                                <div class="d-flex justify-content-between">
+                                    <span t-esc="activity.summary"/>
+                                    <small class="text-muted" t-esc="activity.date_deadline"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+</templates>
