@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista lista específica para préstamos -->
+    <record id="view_picking_tree_loans" model="ir.ui.view">
+        <field name="name">stock.picking.tree.loans.inherit</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.vpicktree"/>
+        <field name="priority" eval="100"/>
+        <field name="arch" type="xml">
+            <!-- Reemplazar campo state con lógica condicional -->
+            <xpath expr="//field[@name='state']" position="replace">
+                <!-- Para menú de préstamos: usar loan_display_state -->
+                <field name="loan_display_state" string="Estado"
+                       invisible="not context.get('from_loans_menu', False)"
+                       decoration-success="loan_display_state == 'Activo'" 
+                       decoration-primary="loan_display_state in ['Devuelto', 'Completado', 'Devolución Completada']"
+                       decoration-warning="loan_display_state == 'Parcialmente Devuelto'"
+                       decoration-info="loan_display_state in ['En Período de Prueba', 'Devolución Pendiente', 'En Espera', 'Confirmado', 'Listo']" 
+                       decoration-muted="loan_display_state == 'Borrador'" 
+                       decoration-danger="loan_display_state == 'Cancelado'"/>
+                
+                <!-- Para otras vistas: usar state estándar -->
+                <field name="state" string="Estado"
+                       invisible="context.get('from_loans_menu', False)"
+                       decoration-success="state == 'done'" 
+                       decoration-info="state in ['waiting', 'confirmed', 'assigned']" 
+                       decoration-warning="state == 'draft'" 
+                       decoration-danger="state == 'cancel'"/>
+            </xpath>
+            
+            <!-- Agregar campos ocultos necesarios cuando sea desde préstamos -->
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="loan_state" column_invisible="1"/>
+                <field name="loan_return_origin_id" column_invisible="1"/>
+                <field name="is_loan" column_invisible="1"/>
+                <field name="loaned_to_partner_id" string="Prestado a" 
+                       invisible="not context.get('from_loans_menu', False)" 
+                       optional="show"/>
+                <field name="loan_expected_return_date" string="Fecha Esperada Devolución"
+                       invisible="not context.get('from_loans_menu', False)" 
+                       optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Vista formulario heredada para préstamos -->
+    <record id="view_picking_form_loans" model="ir.ui.view">
+        <field name="name">stock.picking.form.loans</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <!-- Botón de devolución en button_box -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_create_loan_return" 
+                        type="object"
+                        class="oe_stat_button" 
+                        icon="fa-undo"
+                        string="Devolver"
+                        invisible="not is_loan or state != 'done'"/>
+            </xpath>
+            
+            <!-- Agregar campo Préstamo en el header -->
+            <xpath expr="//field[@name='state']" position="before">
+                <field name="is_loan" invisible="1"/>
+            </xpath>
+            
+            <!-- CAMBIO: Reemplazar owner_id por loaned_to_partner_id -->
+            <xpath expr="//field[@name='owner_id']" position="replace">
+                <field name="loaned_to_partner_id" 
+                       string="Prestado a"
+                       invisible="not is_loan"
+                       required="context.get('from_loans_menu', False) or is_loan"/>
+            </xpath>
+
+            <!-- Agregar campo fecha esperada de devolución después de loaned_to_partner_id -->
+            <xpath expr="//field[@name='loaned_to_partner_id']" position="after">
+                <field name="loan_expected_return_date" 
+                       invisible="not is_loan"
+                       help="Fecha esperada de devolución"/>
+            </xpath>
+
+            <!-- Hacer location_dest_id readonly cuando es préstamo desde menú -->
+            <xpath expr="//field[@name='location_dest_id']" position="attributes">
+                <attribute name="readonly">context.get('from_loans_menu', False)</attribute>
+            </xpath>
+
+            <!-- Agregar una nota informativa para préstamos -->
+            <xpath expr="//field[@name='move_ids_without_package']" position="before">
+                <div class="alert alert-info" invisible="not is_loan" role="alert">
+                    <strong>Préstamo de Productos:</strong> Esta transferencia está marcada como préstamo. 
+                    El cliente destino es obligatorio y la ubicación de destino se establece automáticamente.
+                </div>
+            </xpath>
+            
+            <!-- Agregar notas de préstamo en la página de notas -->
+            <xpath expr="//page[@name='note']" position="inside">
+                <field name="loan_notes" 
+                       invisible="not is_loan"
+                       placeholder="Notas específicas del préstamo..."
+                       string="Notas del Préstamo"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Vista de búsqueda específica para préstamos -->
+    <record id="view_picking_search_loans" model="ir.ui.view">
+        <field name="name">stock.picking.search.loans</field>
+        <field name="model">stock.picking</field>
+        <field name="type">search</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Préstamos">
+                <field name="name" string="Referencia"/>
+                <field name="partner_id"/>
+                <field name="loaned_to_partner_id" string="Prestado a"/>  
+                <field name="picking_type_id"/>
+                <field name="origin"/>
+                <field name="state"/>
+                <field name="loan_expected_return_date"/>
+                
+                <!-- Filtros predefinidos -->
+                <filter name="draft" string="Borrador" domain="[('state', '=', 'draft')]"/>
+                <filter name="waiting" string="En Espera" domain="[('state', '=', 'waiting')]"/>
+                <filter name="confirmed" string="Esperando" domain="[('state', '=', 'confirmed')]"/>
+                <filter name="assigned" string="Listo" domain="[('state', '=', 'assigned')]"/>
+                <filter name="done" string="Hecho" domain="[('state', '=', 'done')]"/>
+                
+                <separator/>
+                
+                <!-- Filtros especiales para préstamos -->
+                <filter name="overdue_loans" string="Préstamos Vencidos" 
+                        domain="[('is_loan', '=', True), ('state', '=', 'done'), ('loan_expected_return_date', '&lt;', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter name="due_soon" string="Vencen Pronto (7 días)" 
+                        domain="[('is_loan', '=', True), ('state', '=', 'done'), ('loan_expected_return_date', '&lt;=', (context_today() + datetime.timedelta(days=7)).strftime('%Y-%m-%d')), ('loan_expected_return_date', '&gt;=', context_today().strftime('%Y-%m-%d'))]"/>
+                
+                <separator/>
+                
+                <!-- Filtros por tipo de operación -->
+                <filter name="internal_transfers" string="Traslado Interno" 
+                        domain="[('picking_type_code', '=', 'internal')]"/>
+                <filter name="incoming" string="Recepciones" domain="[('picking_type_code', '=', 'incoming')]"/>
+                <filter name="outgoing" string="Entregas" domain="[('picking_type_code', '=', 'outgoing')]"/>
+
+                <!-- Agrupaciones -->
+                <group expand="0" string="Agrupar por">
+                    <filter name="group_by_picking_type" string="Tipo de Operación" context="{'group_by': 'picking_type_id'}"/>
+                    <filter name="group_by_partner" string="Cliente" context="{'group_by': 'partner_id'}"/>
+                    <filter name="group_by_loaned_to" string="Prestado a" context="{'group_by': 'loaned_to_partner_id'}"/>  <!-- CAMBIO AQUÍ -->
+                    <filter name="group_by_state" string="Estado" context="{'group_by': 'state'}"/>
+                    <filter name="group_by_date" string="Fecha" context="{'group_by': 'scheduled_date'}"/>
+                    <filter name="group_by_return_date" string="Fecha Devolución" context="{'group_by': 'loan_expected_return_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Acción de ventana para préstamos -->
+    <record id="action_picking_loans" model="ir.actions.act_window">
+        <field name="name">Préstamos</field>
+        <field name="res_model">stock.picking</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_picking_search_loans"/>
+        <field name="domain">['|', ('is_loan', '=', True), ('picking_type_id.warehouse_id.warehouse_type', '=', 'loans')]</field>
+        <field name="context">{
+            'from_loans_menu': True,
+            'default_is_loan': True,
+            'search_default_internal_transfers': 1,
+        }</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                ¡Crea tu primer préstamo!
+            </p>
+            <p>
+                Los préstamos te permiten gestionar productos que se entregan temporalmente
+                a clientes o contactos con la expectativa de que sean devueltos.
+            </p>
+            <p>
+                Para crear préstamos, necesitas tener configurado al menos un almacén 
+                con tipo "Préstamos" y operaciones de traslado interno asociadas.
+            </p>
+        </field>
+    </record>
+</odoo>

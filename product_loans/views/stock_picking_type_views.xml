@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista formulario de tipo de operación heredada - simplificada -->
+    <record id="view_picking_type_form_loans" model="ir.ui.view">
+        <field name="name">stock.picking.type.form.loans</field>
+        <field name="model">stock.picking.type</field>
+        <field name="inherit_id" ref="stock.view_picking_type_form"/>
+        <field name="arch" type="xml">
+            <!-- Solo agregamos una nota informativa simple -->
+            <field name="warehouse_id" position="after">
+                <p class="text-muted">
+                    <small>Los tipos de operación de almacenes tipo "Préstamos" aparecerán automáticamente en el módulo de Préstamos.</small>
+                </p>
+            </field>
+        </field>
+    </record>
+
+    <!-- Vista de formulario de préstamos con dominio COMPLETO restaurado -->
+    <record id="view_picking_form_loans_domain_debug" model="ir.ui.view">
+        <field name="name">stock.picking.form.loans.domain.debug</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="view_picking_form_loans"/>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <!-- Dominio completo restaurado -->
+            <field name="picking_type_id" position="attributes">
+                <attribute name="domain">[
+                    ('warehouse_id.warehouse_type', '=', 'loans'),
+                    ('code', '=', 'internal')
+                ]</attribute>
+                <attribute name="context">{'from_loans_menu': True}</attribute>
+            </field>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista formulario de almacén heredada para agregar Tipo de Almacén -->
+    <record id="view_warehouse_form_loans" model="ir.ui.view">
+        <field name="name">stock.warehouse.form.loans</field>
+        <field name="model">stock.warehouse</field>
+        <field name="inherit_id" ref="stock.view_warehouse"/>
+        <field name="arch" type="xml">
+            <!-- Agregar el campo después del campo 'code' -->
+            <field name="code" position="after">
+                <field name="warehouse_type"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- Vista lista de almacén heredada para mostrar Tipo de Almacén -->
+    <record id="view_warehouse_tree_loans" model="ir.ui.view">
+        <field name="name">stock.warehouse.tree.loans</field>
+        <field name="model">stock.warehouse</field>
+        <field name="inherit_id" ref="stock.view_warehouse_tree"/>
+        <field name="arch" type="xml">
+            <!-- Agregar columna después de name -->
+            <field name="name" position="after">
+                <field name="warehouse_type"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- Vista de búsqueda de almacén heredada para filtrar por tipo -->
+    <record id="view_warehouse_search_loans" model="ir.ui.view">
+        <field name="name">stock.warehouse.search.loans</field>
+        <field name="model">stock.warehouse</field>
+        <field name="inherit_id" ref="stock.stock_warehouse_view_search"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="warehouse_type"/>
+            </field>
+            <search position="inside">
+                <group expand="0" string="Agrupar por">
+                    <filter name="group_by_warehouse_type" string="Tipo de Almacén" context="{'group_by': 'warehouse_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo>

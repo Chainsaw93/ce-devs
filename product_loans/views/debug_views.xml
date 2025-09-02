@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Vista de debug para tipos de operación -->
+        <record id="view_picking_type_debug" model="ir.ui.view">
+            <field name="name">stock.picking.type.debug</field>
+            <field name="model">stock.picking.type</field>
+            <field name="type">list</field>
+            <field name="arch" type="xml">
+                <list string="Debug: Tipos de Operación">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="warehouse_id"/>
+                    <field name="warehouse_id" string="Almacén ID"/>
+                    <field name="active"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Acción de debug -->
+        <record id="action_debug_picking_types" model="ir.actions.act_window">
+            <field name="name">Debug: Todos los Tipos de Operación</field>
+            <field name="res_model">stock.picking.type</field>
+            <field name="view_mode">list</field>
+            <field name="view_id" ref="view_picking_type_debug"/>
+        </record>
+
+        <!-- Vista de debug para almacenes -->
+        <record id="view_warehouse_debug" model="ir.ui.view">
+            <field name="name">stock.warehouse.debug</field>
+            <field name="model">stock.warehouse</field>
+            <field name="type">list</field>
+            <field name="arch" type="xml">
+                <list string="Debug: Almacenes">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="warehouse_type"/>
+                    <field name="active"/>
+                    <field name="company_id"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Acción de debug para almacenes -->
+        <record id="action_debug_warehouses" model="ir.actions.act_window">
+            <field name="name">Debug: Todos los Almacenes</field>
+            <field name="res_model">stock.warehouse</field>
+            <field name="view_mode">list</field>
+            <field name="view_id" ref="view_warehouse_debug"/>
+        </record>
+    </data>
+</odoo>

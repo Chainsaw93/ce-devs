@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista formulario del wizard de resolución de préstamos -->
+    <record id="view_loan_resolution_wizard_form" model="ir.ui.view">
+        <field name="name">loan.resolution.wizard.form</field>
+        <field name="model">loan.resolution.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Resolver Préstamo">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Resolución de Préstamo</h1>
+                        <h2>
+                            <field name="picking_id" readonly="1" options="{'no_open': True}"/>
+                        </h2>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="partner_id" readonly="1"/>
+                            <field name="loan_date" readonly="1"/>
+                            <field name="resolution_date"/>
+                        </group>
+                        <group>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="total_sale_amount" widget="monetary" readonly="1"/>
+                            <field name="total_return_items" readonly="1"/>
+                            <field name="total_keep_loan_items" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <!-- Flags de estado para mostrar secciones relevantes -->
+                    <field name="has_sales" invisible="1"/>
+                    <field name="has_returns" invisible="1"/>
+                    <field name="has_continued_loans" invisible="1"/>
+
+                    <notebook>
+                        <page string="Productos a Resolver" name="products">
+                            <field name="resolution_line_ids">
+                                <list editable="bottom" string="Decisiones por Producto">
+                                    <field name="product_id" readonly="1"/>
+                                    <field name="lot_id" readonly="1" optional="show"/>
+                                    <field name="loaned_qty" readonly="1"/>
+                                    <field name="resolution_type" required="1"/>
+                                    <field name="qty_to_resolve" required="1"/>
+                                    <field name="unit_price" 
+                                           optional="show"
+                                           invisible="resolution_type != 'buy'"
+                                           required="resolution_type == 'buy'"/>
+                                    <field name="total_price" 
+                                           readonly="1"
+                                           optional="show"
+                                           invisible="resolution_type != 'buy'"/>
+                                    <field name="return_condition" 
+                                           optional="show"
+                                           invisible="resolution_type != 'return'"/>
+                                    <field name="notes" optional="hide"/>
+                                    <!-- Referencias ocultas -->
+                                    <field name="tracking_detail_id" column_invisible="1"/>
+                                </list>
+                            </field>
+                            
+                            <div class="alert alert-info" role="alert">
+                                <h4>Instrucciones:</h4>
+                                <ul>
+                                    <li><strong>Comprar:</strong> El cliente se queda con el producto y se genera orden de venta</li>
+                                    <li><strong>Devolver:</strong> El producto regresa al almacén</li>
+                                    <li><strong>Mantener Préstamo:</strong> El producto sigue prestado</li>
+                                </ul>
+                            </div>
+                        </page>
+                        
+                        <page string="Resumen" name="summary" invisible="not has_sales and not has_returns">
+                            <group string="Resumen de Decisiones">
+                                <group invisible="not has_sales">
+                                    <label for="total_sale_amount" string="Total de Ventas"/>
+                                    <div>
+                                        <field name="total_sale_amount" widget="monetary" class="oe_inline"/>
+                                        <span class="text-muted"> (se creará orden de venta)</span>
+                                    </div>
+                                </group>
+                                
+                                <group invisible="not has_returns">
+                                    <label for="total_return_items" string="Items a Devolver"/>
+                                    <div>
+                                        <field name="total_return_items" class="oe_inline"/>
+                                        <span class="text-muted"> (se creará transferencia de devolución)</span>
+                                    </div>
+                                </group>
+                                
+                                <group invisible="not has_continued_loans">
+                                    <label for="total_keep_loan_items" string="Items en Préstamo Continuo"/>
+                                    <div>
+                                        <field name="total_keep_loan_items" class="oe_inline"/>
+                                        <span class="text-muted"> (permanecen prestados)</span>
+                                    </div>
+                                </group>
+                            </group>
+                        </page>
+                        
+                        <page string="Notas" name="notes">
+                            <field name="notes" placeholder="Observaciones sobre la resolución del préstamo..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <footer>
+                    <button name="action_process_resolution" string="Procesar Resolución"
+                            type="object" class="btn-primary" data-hotkey="q"/>
+                    <button string="Cancelar" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vista formulario del wizard de configuración de período de prueba -->
+    <record id="view_loan_trial_config_wizard_form" model="ir.ui.view">
+        <field name="name">loan.trial.config.wizard.form</field>
+        <field name="model">loan.trial.config.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Configurar Período de Prueba">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Período de Prueba</h1>
+                        <h2>
+                            <field name="picking_id" readonly="1" options="{'no_open': True}"/>
+                        </h2>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="partner_id" readonly="1"/>
+                            <field name="trial_end_date" required="1"/>
+                            <field name="trial_duration_days"/>
+                        </group>
+                        <group>
+                            <field name="automatic_reminder"/>
+                            <field name="reminder_user_id" 
+                                   invisible="not automatic_reminder"
+                                   required="automatic_reminder"/>
+                        </group>
+                    </group>
+
+                    <group string="Observaciones">
+                        <field name="notes" placeholder="Detalles específicos del período de prueba..." nolabel="1"/>
+                    </group>
+                    
+                    <div class="alert alert-warning" role="alert">
+                        <strong>Nota:</strong> Al configurar el período de prueba, el cliente tendrá hasta la fecha especificada 
+                        para decidir qué productos comprar, devolver o mantener en préstamo.
+                    </div>
+                </sheet>
+                <footer>
+                    <button name="action_configure_trial" string="Configurar Período de Prueba"
+                            type="object" class="btn-primary"/>
+                    <button string="Cancelar" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vista formulario del wizard de notificaciones -->
+    <record id="view_loan_notification_wizard_form" model="ir.ui.view">
+        <field name="name">loan.notification.wizard.form</field>
+        <field name="model">loan.notification.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Enviar Notificaciones de Préstamos">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Notificaciones de Préstamos</h1>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="notification_type" required="1"/>
+                            <field name="days_threshold" 
+                                   invisible="notification_type == 'overdue'"
+                                   required="notification_type != 'overdue'"/>
+                        </group>
+                        <group>
+                            <field name="create_activities"/>
+                            <field name="send_emails"/>
+                            <field name="assigned_user_id" 
+                                   invisible="not create_activities"
+                                   required="create_activities"/>
+                        </group>
+                    </group>
+
+                    <group string="Filtros Opcionales">
+                        <field name="partner_ids" widget="many2many_tags" 
+                               placeholder="Dejar vacío para incluir todos los clientes"/>
+                    </group>
+                    
+                    <div class="alert alert-info" role="alert">
+                        <h4>Tipos de Notificación:</h4>
+                        <ul>
+                            <li><strong>Préstamos Vencidos:</strong> Productos que ya deberían haber sido devueltos</li>
+                            <li><strong>Préstamos por Vencer:</strong> Productos que vencerán en los próximos N días</li>
+                            <li><strong>Períodos de Prueba Finalizando:</strong> Clientes que deben decidir pronto</li>
+                        </ul>
+                    </div>
+                </sheet>
+                <footer>
+                    <button name="action_send_notifications" string="Enviar Notificaciones"
+                            type="object" class="btn-primary"/>
+                    <button string="Cancelar" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Acción para wizard de notificaciones -->
+    <record id="action_loan_notification_wizard" model="ir.actions.act_window">
+        <field name="name">Enviar Notificaciones</field>
+        <field name="res_model">loan.notification.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>
